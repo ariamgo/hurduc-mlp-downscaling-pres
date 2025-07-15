@@ -1,197 +1,68 @@
-# Presentation slides with Reveal.js
+# A Multi-Layer Perceptron Approach to Downscaling Geostationary Land Surface Temperature in Urban Areas
 
-Maria Gkolemi, 2025
+Alexandra Hurduc, Sofia L. Ermida, and Carlos C. DaCamara
 
----
-
-# Why Reveal.js?
-
-- Cross-platform
-- Markdown-based
-- Supports math with LaTeX
-- Looks great
+Maria Gkolemi, 17/7/2025
 
 ---
 
-# Inline Math
+# Introduction
 
-Einstein's formula: $E = mc^2$
+LST = key variable for urban climate & heat island studies
+
+Remote sensing trade-off:
+- Geostationary: High temporal, low spatial resolution
+- Polar orbiters: High spatial, low temporal resolution
+
+Goal: learn a mapping from coarse-frequent data to fine-sparse data ✨Downscaling✨
+
+In this study: Use a Multi-Layer Perceptron (MLP) to downscale SEVIRI geostationary LST (4.5 km) to 750 m using VIIRS data as target.
+
+---
+# Data
+Sensor | Platform | Resolution | Role
+--- | --- | --- | ---
+SEVIRI | MSG | 15 min, 4.5 km | Input LST
+VIIRS | Polar Orbiters | 2x/day, 750 m | Target LST
+SLSTR | Polar Orbiters | 1 km | External Validation
+MODIS EVI | Terra/Aqua | 500 m | Vegetation Input
+Solar Zenith Angle | SEVIRI | - | Time-of-day proxy
 
 ---
 
-# Block Math
+# Model Architecture
 
-$$
-\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
-$$
+Pixel-wise MLP
+Inputs: SEVIRI, EVI, SZA
+1 hidden layer, 5 neurons, tanh activation
+
+For Madrid $\rightarrow \approx 6200$ models 
 
 ---
+# Training
 
-# Vertical slides
+- Training: 2019–2022 (80% random samples)
+- Test: 2019–2022 (20% hold-out)
+- Independent validation: 2023–2024 (SNPP, JPSS1/2, S3A)
+- Normalized inputs (−1, 1)
+- Loss function: MSE
 
-This is the parent of vertical slides.
+---
+# Results
+
+---
+# Strengths
+✅ Simple, robust pixel-wise MLP
+✅ Requires minimal auxiliary data
+✅ Works well across multiple sensors
+✅ Maintains 15-min temporal resolution
+✅ Effective even with seasonal variability
 
 --
-## Vertical slide 1
-
-This is a vertical slide under the parent slide.
-
---
-## Vertical slide 2
-
-Another vertical slide under the parent slide.
-
----
-
-# Add figures
-
-Add a figure with Markdown code
-
-```markdown
-    ![Histogram of the solution of a bistable ODE](figures/demo.png)
-```
-
-![Histogram](figures/demo.png)
-
---
-
-or with HTML code for more control
-
-```html
-<img src="figures/demo.png" alt="Histogram" width="400">
-```
-
-<img src="figures/demo.png" alt="Histogram" width="400">
-
---
-
-or with percentage
-
-```html
-<img src="figures/demo.png" alt="Histogram" style="width:40%">
-```
-
-<img src="figures/demo.png" alt="Histogram" style="width:40%">
-
---
-
-You can add a caption like this
-```html
-<figure>
-  <img src="figures/demo.png" alt="Time series" style="width:70%">
-  <figcaption>Figure 1: Histogram of the solution of a bistable ODE</figcaption>
-</figure>
-```
-
-<figure>
-  <img src="figures/demo.png" alt="Time series" style="width:70%">
-  <figcaption>Figure 1: Histogram of the solution of a bistable ODE</figcaption>
-</figure>
-
----
-
-# Show a video
-
-```html
-<video src="media/video.mp4" autoplay muted loop style="width: 60%"></video>
-```
-
-<video src="media/video.mp4" autoplay muted loop style="width: 60%"></video>
-
-
----
-
-# Code blocks
-
-<pre><code class="language-python" data-trim>
-def fibonacci(n):
-    if n <= 1:
-        return n
-    return fibonacci(n-1) + fibonacci(n-2)
-</code></pre>
-
-
---
-
-# Code blocks with highlighting
-
-<pre><code class="language-python" data-trim data-line-numbers="3,5-6,10">
-import numpy as np
-import matplotlib.pyplot as plt
-
-def simulate_ode(f, y0, t):
-    """Simple forward Euler ODE solver."""
-    y = np.zeros_like(t)
-    y[0] = y0
-    for i in range(1, len(t)):
-        dt = t[i] - t[i-1]
-        y[i] = y[i-1] + dt * f(t[i-1], y[i-1])
-    return y
-
-# Example usage
-f = lambda t, y: -0.5 * y
-t = np.linspace(0, 10, 100)
-y = simulate_ode(f, 1.0, t)
-
-plt.plot(t, y)
-plt.title("Exponential Decay")
-plt.xlabel("Time")
-plt.ylabel("y(t)")
-plt.grid()
-plt.show()
-</code></pre>
-
-
---
-
-<section>
-  <h3>Code blocks with animations</h3>
-
-  <div class="fragment">
-    <pre><code class="language-python" data-trim data-line-numbers>
-import numpy as np
-import matplotlib.pyplot as plt
-    </code></pre>
-  </div>
-
-  <div class="fragment">
-    <pre><code class="language-python" data-trim data-line-numbers>
-def simulate_ode(f, y0, t):
-    """Simple forward Euler ODE solver."""
-    y = np.zeros_like(t)
-    y[0] = y0
-    for i in range(1, len(t)):
-        dt = t[i] - t[i-1]
-        y[i] = y[i-1] + dt * f(t[i-1], y[i-1])
-    return y
-    </code></pre>
-  </div>
-
-  <div class="fragment">
-    <pre><code class="language-python" data-trim data-line-numbers>
-f = lambda t, y: -0.5 * y
-t = np.linspace(0, 10, 100)
-y = simulate_ode(f, 1.0, t)
-    </code></pre>
-  </div>
-
-  <div class="fragment">
-    <pre><code class="language-python" data-trim data-line-numbers>
-plt.plot(t, y)
-plt.title("Exponential Decay")
-plt.xlabel("Time")
-plt.ylabel("y(t)")
-plt.grid()
-plt.show()
-    </code></pre>
-  </div>
-</section>
-
-
-
----
-
-### 🦧 That is all 🦧
-
-
-
+# Weaknesses
+❌ No spatial context (pixel-wise only)
+❌ Limited input features (no height, albedo, etc.)
+❌ Underperforms in water/irrigated areas
+❌ No uncertainty quantification
+❌ Trained only on SNPP time range
+❌ Computational inefficiency for large areas
