@@ -86,8 +86,7 @@ For Madrid $\rightarrow \sim 6200$ models
   <figcaption>Maps of bias (top) and RMSE (bottom) for each sensor</figcaption>
 </figure>
 
----
-# 
+
 ---
 # Strengths
 - Simple, robust pixel-wise MLP
@@ -108,3 +107,15 @@ For Madrid $\rightarrow \sim 6200$ models
 - Scalability?
     - Domain specific
 - Train-test evaluation only: not very robust
+
+---
+# Conclusions and outlook
+
+A lightweight MLP per pixel can:
+- Learn local spatio-temporal LST patterns
+- Downscale from 4.5 km → 750 m with sub-degree error
+- Generalize across sensors, seasons, and urban contexts
+
+Can be improved, but already pretty good overall.
+
+An elegant ML solution for real-world satellite data fusion.
